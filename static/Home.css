@@ -1,0 +1,61 @@
+body{
+    background-image:linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
+    }
+    h1 {
+        margin-top: 50px;
+        font-size:50px;
+        text-align:center;
+        background: -webkit-linear-gradient(#989696, #f70909);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .gradient-text {
+        background-image: linear-gradient(60deg, #fe51ca, #3ad1ff);
+        background-clip: text;
+        color:black;
+        width:800px;
+        height:300px;
+        border-radius: 5px;
+        margin: 100 auto;
+        font-size:30px;
+        text-align: center;
+        padding:50px;
+    }
+    .login {
+        background-color : red;
+        color: white;
+        padding: 10px 25px;
+        border-radius: 4px;
+        border-color: red;
+        font-size: 20px;
+        font-family: cursive;
+    }
+
+    #login_position {
+        position: fixed;
+        bottom:150px;
+        right: 350px;
+    }
+    .register {
+        background-color : red;
+        color: white;
+        padding: 10px 25px;
+        border-radius: 4px;
+        border-color: red;
+        font-size: 20px;
+        font-family: cursive;
+    }
+
+    #register_position {
+        position: fixed;
+        bottom:150px;
+        right: 500px;
+    }
+    .login:hover {
+        background-color: brown;
+        color: white;
+    }
+    .register:hover {
+        background-color: brown;
+        color: white;
+    }
