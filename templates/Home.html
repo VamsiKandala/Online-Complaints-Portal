@@ -1,0 +1,85 @@
+<html>
+    <head>
+        <link rel="<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" 
+        crossorigin="anonymous">
+        <style>
+            body{
+            background-image:linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
+            }
+            h1 {
+                margin-top: 50px;
+                font-size:50px;
+                text-align:center;
+                background: -webkit-linear-gradient(#989696, #f70909);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+            .gradient-text {
+                background-image: linear-gradient(60deg, #fe51ca, #3ad1ff);
+                background-clip: text;
+                color:black;
+                width:800px;
+                height:300px;
+                border-radius: 5px;
+                margin: 100 auto;
+                font-size:30px;
+                text-align: center;
+                padding:50px;
+            }
+            .login {
+                background-color : red;
+                color: white;
+                padding: 10px 25px;
+                border-radius: 4px;
+                border-color: red;
+                font-size: 20px;
+                font-family: cursive;
+            }
+
+            #login_position {
+                position: fixed;
+                bottom:150px;
+                right: 350px;
+            }
+            .register {
+                background-color : red;
+                color: white;
+                padding: 10px 25px;
+                border-radius: 4px;
+                border-color: red;
+                font-size: 20px;
+                font-family: cursive;
+            }
+
+            #register_position {
+                position: fixed;
+                bottom:150px;
+                right: 500px;
+            }
+            .login:hover {
+                background-color: brown;
+                color: white;
+            }
+            .register:hover {
+                background-color: brown;
+                color: white;
+            }
+
+        </style>
+    </head>
+    <body>
+        <h1>ONLINE COMPLAINTS PORTAL</h1>
+        <div class="gradient-text">
+        <i>Welcome to Online Complaints Portal.<br><br>
+
+        Here you can give complaints regarding your issues.</i><br><br>
+        <div id="login_position">
+            <a href="{{url_for('userlogin')}}"><button class="login" id="login" >LOGIN</button></a>
+        </div>
+        <div id="register_position">
+            <a href="{{url_for('userregistration')}}"><button class="register" id="register" >REGISTER</button></a>
+        </div>
+        </div>
+    </body>
+</html>
