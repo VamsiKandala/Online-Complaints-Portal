@@ -123,6 +123,7 @@ def userview():
 
 @app.route('/usercomplaint',methods=['GET','POST'])
 def usercomplaint():
+    cursor=mydb.cursor(buffered=True)
     if request.method == 'POST':
         usub=request.form['subject']
         ubody=request.form['body']
@@ -136,7 +137,7 @@ def usercomplaint():
             OTP = OTP + digits[math.floor(random.random()*10)]
         
         data={'OTP':OTP,'subject':usub,'body':ubody,'usermail':unmail,'response':a}
-        cursor=mydb.cursor(buffered=True)
+        
         cursor.execute("select email,name from userdata where email=%s",([data['usermail']]))
         emailrec=cursor.fetchone()
         if emailrec:
