@@ -50,11 +50,14 @@ def userlogin():
         if record==1:
             session['loggedin']=True
             session['usermail']=usermail
+            cursor.close()
             return redirect(url_for('userview'))
+        
+        
         else:
             flash('Invalid Username/Password')
             return render_template('login.html')
-    mydb.commit()
+        
     return render_template('login.html')
 
 @app.route('/userregistration',methods=['GET','POST'])
