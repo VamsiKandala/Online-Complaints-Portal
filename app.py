@@ -114,6 +114,7 @@ def confirm(token):
 @app.route('/userview',methods=['GET','POST'])
 def userview():
     usermail=[session.get('usermail')]
+    cursor=mydb.cursor(buffered=True)
     cursor.execute("select complaintno,issue,description,response from usercomp where usermail=%s",(usermail))
     record=cursor.fetchall()
     if record:
