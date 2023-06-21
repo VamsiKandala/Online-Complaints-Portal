@@ -1,13 +1,20 @@
 from flask import Flask, request, redirect,render_template,session,url_for,flash
-import cx_Oracle
+import mysql.connector
 import random
 import math
+from key import secret_key,salt
+from itsdangerous import URLSafeTimedSerializer
+from stoken import token
+from cmail import sendmail
 
-con = cx_Oracle.connect('vamsi/vamsi@localhost:1521/xe')
-cursor=con.cursor()
 
 app = Flask(__name__)
-app.secret_key = "super secret key"
+app.secret_key =secret_key
+
+
+mydb=mysql.connector.connect(host="localhost",user="root",password="vamsi",db="ocp")
+cursor=mydb.cursor()
+
 
 
 
@@ -23,14 +30,17 @@ def userlogin():
     if request.method == 'POST':
         usermail=request.form['email']
         up=request.form['password1']
-        result=cursor.execute("select * from userdata where email=:s and password=:s",(usermail,up))
-        record=result.fetchone()
-        if record:
+        cursor.execute("select count(*) from userdata where email=%s and password=%s",(usermail,up))
+        record=cursor.fetchone()[0]
+        print(record)
+        if record==1:
             session['loggedin']=True
-            session['usermail']=record[1]
-            session['username']=record[0]
+            session['usermail']=usermail
             return redirect(url_for('userview'))
-        con.commit()
+        else:
+            flash('Invalid Username/Password')
+            return render_template('login.html')
+    mydb.commit()
     return render_template('login.html')
 
 @app.route('/userregistration',methods=['GET','POST'])
@@ -40,16 +50,54 @@ def userregistration():
         umail=request.form['email']
         udob=request.form['date']
         upass=request.form['password2']
-        result=cursor.execute("insert into userdata values(:s,:s,:s,:s)",(uname,umail,udob,upass))
-        con.commit()
-        return redirect(url_for('home'))
+        cursor.execute('select count(*) from userdata where name=%s',[uname])
+        count=cursor.fetchone()[0]
+        cursor.execute('select count(*) from userdata where email=%s',[umail])
+        count1=cursor.fetchone()[0]
+        cursor.close()
+        if count==1:
+            flash('username already in use')
+            return render_template('registration.html')
+        elif count1==1:
+            flash('Email already in use')
+            return render_template('registration.html')
+        data={'username':uname,'password':upass,'email':umail,'dob':udob}
+        subject='Email Confirmation'
+        body=f"Thanks for signing up\n\nfollow this link for further steps-{url_for('confirm',token=token(data),_external=True)}"
+        sendmail(to=umail,subject=subject,body=body)
+        flash('Confirmation link sent to mail')
+        return redirect(url_for('userlogin'))
+        
     return render_template('registration.html')
+
+@app.route('/confirm/<token>')
+def confirm(token):
+    try:
+        serializer=URLSafeTimedSerializer(secret_key)
+        data=serializer.loads(token,salt=salt,max_age=180)
+    except Exception as e:
+        #print(e)
+        return 'Link Expired register again'
+    else:
+        cursor=mydb.cursor(buffered=True)
+        username=data['username']
+        cursor.execute('select count(*) from userdata where name=%s',[username])
+        count=cursor.fetchone()[0]
+        if count==1:
+            cursor.close()
+            flash('You are already registerterd!')
+            return redirect(url_for('login'))
+        else:
+            cursor.execute('insert into userdata values(%s,%s,%s,%s)',[data['username'],data['email'],data['dob'],data['password']])
+            mydb.commit()
+            cursor.close()
+            flash('Details registered!')
+            return redirect(url_for('userlogin'))
 
 @app.route('/userview',methods=['GET','POST'])
 def userview():
-    usermail=session.get('usermail')
-    username=session.get('username')
-    result=cursor.execute("select complaintno,issue,description,response from usercomp where usermail=:s and username=:s",(usermail,username))
+    usermail=[session.get('usermail')]
+    cursor.execute("select complaintno,issue,description,response from usercomp where usermail=%s",(usermail))
     record=cursor.fetchall()
     if record:
         return render_template('user_view.html',value=record)
@@ -61,7 +109,6 @@ def usercomplaint():
         usub=request.form['subject']
         ubody=request.form['body']
         unmail=session.get('usermail')
-        uname=session.get('username')
         digits = "0123456789"
         a='pending'
         OTP=''
@@ -69,17 +116,28 @@ def usercomplaint():
             #6 digit otp
         for i in range(6):
             OTP = OTP + digits[math.floor(random.random()*10)]
-
-        email=cursor.execute("select email,name from userdata where email=:s and name=:s",(unmail,uname))
+        
+        data={'OTP':OTP,'subject':usub,'body':ubody,'usermail':unmail,'response':a}
+        
+        cursor.execute("select email,name from userdata where email=%s",([data['usermail']]))
         emailrec=cursor.fetchone()
         if emailrec:
-            result=cursor.execute("insert into usercomp values(:s,:s,:s,:s,:s,:s)",(OTP,usub,ubody,unmail,uname,a))
-            con.commit()
+            result=cursor.execute("insert into usercomp values(%s,%s,%s,%s,%s)",[data['OTP'],data['subject'],data['body'],data['usermail'],data['response']])
+            mydb.commit()
             return redirect(url_for('userview'))
         else:
-            return render_template('complaint.html',message='Email/username is not correct.Please enter registered mail to register complaint')
+            return render_template('complaint.html')
         
     return render_template('complaint.html')
+
+@app.route('/logout')
+def logout():
+    if session.get('user'):
+        session.pop('user')
+        flash('Successfully logged out')
+        return redirect(url_for('userlogin'))
+    else:
+        return redirect(url_for('userlogin'))
 
 
 
