@@ -118,12 +118,13 @@ def userview():
     cursor.execute("select complaintno,issue,description,response from usercomp where usermail=%s",(usermail))
     record=cursor.fetchall()
     if record:
+        cursor.close()
         return render_template('user_view.html',value=record)
     return render_template('user_view.html')
 
+cursor=mydb.cursor(buffered=True)
 @app.route('/usercomplaint',methods=['GET','POST'])
 def usercomplaint():
-    cursor=mydb.cursor(buffered=True)
     if request.method == 'POST':
         usub=request.form['subject']
         ubody=request.form['body']
@@ -143,8 +144,10 @@ def usercomplaint():
         if emailrec:
             result=cursor.execute("insert into usercomp values(%s,%s,%s,%s,%s)",[data['OTP'],data['subject'],data['body'],data['usermail'],data['response']])
             mydb.commit()
+            cursor.close()
             return redirect(url_for('userview'))
         else:
+            cursor.close()
             return render_template('complaint.html')
         
     return render_template('complaint.html')
