@@ -27,7 +27,7 @@ with mysql.connector.connect(host=host,user=user,password=password,port=port,db=
     cursor.execute("create table if not exists adcomp(username varchar(100),password varchar(30))")
     cursor.close()
 mydb=mysql.connector.connect(host=host,user=user,password=password,db=db)
-cursor=conn.cursor(buffered=True)
+cursor=mydb.cursor(buffered=True)
 
 
 
