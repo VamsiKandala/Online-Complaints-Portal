@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect,render_template,session,url_for,flash
 import mysql.connector
 import random
-import math
+import math,os
 from key import secret_key,salt
 from itsdangerous import URLSafeTimedSerializer
 from stoken import token
@@ -12,8 +12,21 @@ app = Flask(__name__)
 app.secret_key =secret_key
 
 
-mydb=mysql.connector.connect(host="localhost",user="root",password="vamsi",db="ocp")
-cursor=mydb.cursor()
+#mydb=mysql.connector.connect(host="localhost",user="root",password="vamsi",db="ocp")
+#cursor=mydb.cursor()
+
+user=os.environ.get('RDS_USERNAME')
+db=os.environ.get('RDS_DB_NAME')
+password=os.environ.get('RDS_PASSWORD')
+host=os.environ.get('RDS_HOSTNAME')
+port=os.environ.get('RDS_PORT')
+with mysql.connector.connect(host=host,user=user,password=password,port=port,db=db) as conn:
+    cursor=conn.cursor(buffered=True)
+    cursor.execute("create table if not exists usercomp(complaintno varchar(10),issue varchar(1000),description varchar(2000),usermail varchar(100),username varchar(100),response varchar(20))")
+    cursor.execute("create table if not exists userdata(name varchar(50),email varchar(100),dob varchar(20),password varchar(30))")
+    cursor.execute("create table if not exists adcomp(username varchar(100),password varchar(30))")
+    cursor.close()
+mydb=mysql.connector.connect(host=host,user=user,password=password,db=db)
 
 
 
@@ -147,4 +160,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

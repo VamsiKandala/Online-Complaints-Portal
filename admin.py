@@ -6,9 +6,9 @@ from cmail import sendmail
 
 app = Flask(__name__)
 app.secret_key = "super secret key"
-mydb=mysql.connector.connect(host="localhost",user="root",password="vamsi",db="ocp")
-cursor=mydb.cursor()
-'''user=os.environ.get('RDS_USERNAME')
+#mydb=mysql.connector.connect(host="localhost",user="root",password="vamsi",db="ocp")
+#cursor=mydb.cursor()
+user=os.environ.get('RDS_USERNAME')
 db=os.environ.get('RDS_DB_NAME')
 password=os.environ.get('RDS_PASSWORD')
 host=os.environ.get('RDS_HOSTNAME')
@@ -19,7 +19,7 @@ with mysql.connector.connect(host=host,user=user,password=password,port=port,db=
     cursor.execute("create table if not exists userdata(name varchar(50),email varchar(100),dob varchar(20),password varchar(30))")
     cursor.execute("create table if not exists adcomp(username varchar(100),password varchar(30))")
     cursor.close()
-mydb=mysql.connector.connect(host=host,user=user,password=password,db=db)'''
+mydb=mysql.connector.connect(host=host,user=user,password=password,db=db)
 @app.route('/')
 def h1():
     return redirect(url_for('login'))
