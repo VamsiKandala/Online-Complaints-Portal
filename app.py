@@ -190,13 +190,14 @@ def adminview():
         
     return render_template('admin_view.html')
 
-cursor=mydb.cursor(buffered=True)
+
 @app.route('/updatestatus',methods=['GET','POST'])
 def updatestatus():
     if request.method == 'POST':
         aa=request.form['compno']
         ab=request.form['status']
         cno=[aa]
+        cursor=mydb.cursor(buffered=True)
         result=cursor.execute("update usercomp set response=%s where complaintno=%s",(ab,aa))
         ac=cursor.execute("select usermail,issue from usercomp where complaintno=%s",(cno))
         ad=cursor.fetchone()
