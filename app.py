@@ -107,7 +107,7 @@ def confirm(token):
         if count==1:
             cursor.close()
             flash('You are already registerterd!')
-            return redirect(url_for('login'))
+            return redirect(url_for('userlogin'))
         else:
             cursor.execute('insert into userdata values(%s,%s,%s,%s)',[data['username'],data['email'],data['dob'],data['password']])
             mydb.commit()
