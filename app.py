@@ -163,7 +163,6 @@ def adminlogin():
         un=request.form['email']
         up=request.form['password1']
         cursor=mydb.cursor(buffered=True)
-        cursor.execute("insert into adcomp values('vamsi@gmail.com','vamsi')")
         cursor.execute("select count(*) from adcomp where username=%s and password=%s",(un,up))
         record=cursor.fetchone()[0]
         if record==1:
