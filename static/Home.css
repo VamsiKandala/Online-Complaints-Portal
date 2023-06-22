@@ -49,13 +49,33 @@ body{
     #register_position {
         position: fixed;
         bottom:150px;
-        right: 500px;
+        right: 550px;
     }
     .login:hover {
         background-color: brown;
         color: white;
     }
     .register:hover {
+        background-color: brown;
+        color: white;
+    }
+
+    .adminlogin {
+        background-color : red;
+        color: white;
+        padding: 10px 25px;
+        border-radius: 4px;
+        border-color: red;
+        font-size: 20px;
+        font-family: cursive;
+    }
+
+    #adminlogin_position {
+        position: fixed;
+        bottom:150px;
+        left: 350px;
+    }
+    .adminlogin:hover {
         background-color: brown;
         color: white;
     }
