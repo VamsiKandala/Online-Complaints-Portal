@@ -166,7 +166,7 @@ def adminlogin():
         cursor=mydb.cursor(buffered=True)
         cursor.execute("select count(*) from adcomp where username=%s and password=%s",(un,up))
         record=cursor.fetchone()[0]
-        if record==1:
+        if record:
             session['loggedin']=True
             session['username']=un
             mydb.commit()
