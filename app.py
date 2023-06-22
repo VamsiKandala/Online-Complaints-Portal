@@ -107,7 +107,7 @@ def confirm(token):
         if count==1:
             cursor.close()
             flash('You are already registerterd!')
-            return redirect(url_for('userlogin'))
+            return redirect(url_for('login'))
         else:
             cursor.execute('insert into userdata values(%s,%s,%s,%s)',[data['username'],data['email'],data['dob'],data['password']])
             mydb.commit()
@@ -163,6 +163,8 @@ def adminlogin():
         un=request.form['email']
         up=request.form['password1']
         cursor=mydb.cursor(buffered=True)
+        cursor.execute("insert into  adcomp values('vamsi@gmail.com','vamsi')")
+        mydb.commit()
         cursor.execute("select count(*) from adcomp where username=%s and password=%s",(un,up))
         record=cursor.fetchone()[0]
         if record==1:
