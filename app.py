@@ -161,7 +161,8 @@ def usercomplaint():
 @app.route('/adminlogin',methods=['GET','POST'])
 def adminlogin():
     cursor=mydb.cursor(buffered=True)
-    cursor.execute("delete from adcomp values where username='vamsi@gmail.com' ")
+    a='vamsi@gmail.com'
+    cursor.execute("delete from adcomp values where username=%s",(a))
     mydb.commit()
     cursor.close()
     return redirect(url_for('home'))
