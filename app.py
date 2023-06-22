@@ -165,6 +165,7 @@ def adminlogin():
         cursor=mydb.cursor(buffered=True)
         cursor.execute("insert into adcomp values('%s','%s')",[un,up])
         mydb.commit()
+        return redirect(url_for('adminlogin'))
         '''cursor.execute("select count(*) from adcomp where username=%s and password=%s",(un,up))
         record=cursor.fetchone()[0]
         if record==1:
