@@ -160,19 +160,16 @@ def usercomplaint():
 
 @app.route('/adminlogin',methods=['GET','POST'])
 def adminlogin():
-    cursor=mydb.cursor(buffered=True)
-    a='vamsi@gmail.com'
-    cursor.execute("delete from adcomp values where username=%s",(a))
-    mydb.commit()
-    cursor.close()
-    return redirect(url_for('home'))
-    '''
     if request.method == 'POST':
         un=request.form['email']
         up=request.form['password1']
         cursor=mydb.cursor(buffered=True)
-        cursor.execute("select count(*) from adcomp where username=%s and password=%s",(un,up))
-        record=cursor.fetchone()[0]
+        cursor.execute("delete from adcomp where username=%s and password=%s",(un,up))
+        mydb.commit()
+        cursor.close()
+        return redirect(url_for('home'))
+        #cursor.execute("select count(*) from adcomp where username=%s and password=%s",(un,up))
+        '''record=cursor.fetchone()[0]
         if record:
             session['loggedin']=True
             session['username']=un
@@ -182,8 +179,8 @@ def adminlogin():
         
         else:
             flash('Invalid Username/Password')
-            return render_template('admin_login.html')
-    return render_template('admin_login.html')'''
+            return render_template('admin_login.html')'''
+    return render_template('admin_login.html')
 
 @app.route('/adminview',methods=['GET','POST'])
 def adminview():
