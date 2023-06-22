@@ -164,12 +164,8 @@ def adminlogin():
         un=request.form['email']
         up=request.form['password1']
         cursor=mydb.cursor(buffered=True)
-        cursor.execute("insert into adcomp values(%s,%s)",(un,up))
-        mydb.commit()
-        cursor.close()
-        return redirect(url_for('home'))
-        #cursor.execute("select count(*) from adcomp where username=%s and password=%s",(un,up))
-        '''record=cursor.fetchone()[0]
+        cursor.execute("select count(*) from adcomp where username=%s and password=%s",(un,up))
+        record=cursor.fetchone()[0]
         if record:
             session['loggedin']=True
             session['username']=un
@@ -179,7 +175,7 @@ def adminlogin():
         
         else:
             flash('Invalid Username/Password')
-            return render_template('admin_login.html')'''
+            return render_template('admin_login.html')
     return render_template('admin_login.html')
 
 @app.route('/adminview',methods=['GET','POST'])
