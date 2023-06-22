@@ -46,6 +46,7 @@ def userlogin():
     if request.method == 'POST':
         usermail=request.form['email']
         up=request.form['password1']
+        cursor=mydb.cursor(buffered=True)
         cursor.execute("select count(*) from userdata where email=%s and password=%s",(usermail,up))
         record=cursor.fetchone()[0]
         print(record)
