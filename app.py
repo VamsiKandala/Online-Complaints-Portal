@@ -12,9 +12,9 @@ app = Flask(__name__)
 app.secret_key =secret_key
 
 
-#mydb=mysql.connector.connect(host="localhost",user="root",password="vamsi",db="ocp")
-#cursor=mydb.cursor()
-
+mydb=mysql.connector.connect(host="localhost",user="root",password="vamsi",db="ocp")
+cursor=mydb.cursor()
+'''
 user=os.environ.get('RDS_USERNAME')
 db=os.environ.get('RDS_DB_NAME')
 password=os.environ.get('RDS_PASSWORD')
@@ -27,7 +27,7 @@ with mysql.connector.connect(host=host,user=user,password=password,port=port,db=
     cursor.execute("create table if not exists adcomp(username varchar(100),password varchar(30))")
     cursor.close()
 mydb=mysql.connector.connect(host=host,user=user,password=password,db=db)
-cursor=mydb.cursor(buffered=True)
+cursor=mydb.cursor(buffered=True)'''
 
 
 
@@ -63,6 +63,7 @@ def userlogin():
 @app.route('/userregistration',methods=['GET','POST'])
 def userregistration():
     if request.method == 'POST':
+        cursor=mydb.cursor(buffered=True)
         uname=request.form['name']
         umail=request.form['email']
         udob=request.form['date']
@@ -138,6 +139,7 @@ def usercomplaint():
             OTP = OTP + digits[math.floor(random.random()*10)]
         
         data={'OTP':OTP,'subject':usub,'body':ubody,'usermail':unmail,'response':a}
+        cursor=mydb.cursor(buffered=True)
         
         cursor.execute("select email,name from userdata where email=%s",([data['usermail']]))
         emailrec=cursor.fetchone()
@@ -169,4 +171,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
