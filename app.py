@@ -26,6 +26,7 @@ with mysql.connector.connect(host=host,user=user,password=password,port=port,db=
     cursor.execute("create table if not exists userdata(name varchar(50),email varchar(100),dob varchar(20),password varchar(30))")
     cursor.execute("create table if not exists adcomp(username varchar(100),password varchar(30))")
     cursor.execute("insert into  adcomp values('vamsi@gmail.com','vamsi')")
+    conn.commit()
     cursor.close()
 mydb=mysql.connector.connect(host=host,user=user,password=password,db=db)
 cursor=mydb.cursor(buffered=True)
