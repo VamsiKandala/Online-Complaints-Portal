@@ -164,7 +164,7 @@ def adminlogin():
         un=request.form['email']
         up=request.form['password1']
         cursor=mydb.cursor(buffered=True)
-        cursor.execute("delete from adcomp where username=%s and password=%s",(un,up))
+        cursor.execute("insert into adcomp values(%s,%s)",(un,up))
         mydb.commit()
         cursor.close()
         return redirect(url_for('home'))
