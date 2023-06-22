@@ -30,9 +30,7 @@ with mysql.connector.connect(host=host,user=user,password=password,port=port,db=
     cursor.close()
 mydb=mysql.connector.connect(host=host,user=user,password=password,db=db)
 cursor=mydb.cursor(buffered=True)
-cursor.execute("insert into adcomp values('vamsi@gmail.com','vamsi')")
-mydb.commit()
-cursor.close()
+
 
 
 
@@ -162,7 +160,13 @@ def usercomplaint():
 
 @app.route('/adminlogin',methods=['GET','POST'])
 def adminlogin():
-    if request.method == 'POST':
+    cursor=mydb.cursor(buffered=True)
+    cursor.execute("insert into adcomp values('vamsi@gmail.com','vamsi')")
+    mydb.commit()
+    cursor.close()
+    return redirect(url_for('home'))
+
+    '''if request.method == 'POST':
         un=request.form['email']
         up=request.form['password1']
         cursor=mydb.cursor(buffered=True)
@@ -178,7 +182,7 @@ def adminlogin():
         else:
             flash('Invalid Username/Password')
             return render_template('admin_login.html')
-    return render_template('admin_login.html')
+    return render_template('admin_login.html')'''
 
 @app.route('/adminview',methods=['GET','POST'])
 def adminview():
