@@ -31,10 +31,6 @@ with mysql.connector.connect(host=host,user=user,password=password,port=port,db=
 mydb=mysql.connector.connect(host=host,user=user,password=password,db=db)
 cursor=mydb.cursor(buffered=True)
 
-
-
-
-
 @app.route('/')
 def h1():
     return redirect(url_for('home'))
@@ -56,7 +52,6 @@ def userlogin():
             session['usermail']=usermail
             cursor.close()
             return redirect(url_for('userview'))
-        
         
         else:
             flash('Invalid Username/Password')
@@ -236,13 +231,6 @@ def logout():
         return redirect(url_for('userlogin'))
     else:
         return redirect(url_for('userlogin'))
-
-
-
-
-
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
